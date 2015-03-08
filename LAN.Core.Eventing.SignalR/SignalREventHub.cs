@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Security.Authentication;
 using System.Threading.Tasks;
 using LAN.Core.DependencyInjection;
@@ -56,6 +57,7 @@ namespace LAN.Core.Eventing.SignalR
 
 				data.Add("correlationId", this.Context.ConnectionId);
 				var deserializedRequest = (RequestBase)data.ToObject(handler.GetRequestType());
+				deserializedRequest.QueryStrings = Context.QueryString.ToDictionary(x => x.Key, x => x.Value);
 
 				if (!handler.IsAuthorized(deserializedRequest, this.Context.User))
 				{
